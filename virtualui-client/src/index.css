@@ -1,8 +1,24 @@
 @import "tailwindcss";
+@font-face {
+  font-family: "Gilroy";
+  src: url("/Gilroy-Medium.ttf") format("truetype");
+}
+@theme {
+  --font-gilroy: "Gilroy", sans-serif;
+}
+
+body {
+  overflow-y: overlay;
+}
+
+html,
+body {
+  scrollbar-width: thin;
+  scrollbar-color: #113139 #02131b;
+}
 
 ::-webkit-scrollbar {
   width: 4px;
-  height: 4px;
 }
 
 ::-webkit-scrollbar-track {
@@ -10,14 +26,10 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(59, 232, 255, 0.35);
-  border-radius: 9999px;
+  background: rgba(14, 165, 233, 0.25);
+  border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(59, 232, 255, 0.55);
-}
-
-::-webkit-scrollbar-button {
-  display: none;
+  background: rgba(14, 165, 233, 0.7);
 }

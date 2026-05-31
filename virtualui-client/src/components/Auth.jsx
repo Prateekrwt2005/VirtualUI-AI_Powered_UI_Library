@@ -9,6 +9,8 @@ import { auth, provider } from '../utils/firebase';
 import { signInWithPopup } from 'firebase/auth';
 import axios from 'axios';
 import { ServerURL } from '../App';
+import { useDispatch } from 'react-redux';
+import { setUserData } from '../redux/userSlice';
 
 
 const steps = [
@@ -41,7 +43,7 @@ const steps = [
 
 function Auth({onClose}) {
     const [active,setActive] = React.useState(0)
-
+   const dispatch= useDispatch()
    
   useEffect(() => {
     const id = setInterval(() => {
@@ -60,7 +62,10 @@ const googleauth=async()=>{
 
     const res = await axios.post(ServerURL+ "/api/auth/google", {name, email}, {withCredentials: true});
 
- console.log(res.data)
+    console.log("BACKEND RESPONSE:", res.data)
+
+ dispatch(setUserData(res.data.user))
+  onClose()
 
 }
 catch(err){
@@ -145,7 +150,7 @@ catch(err){
 
      <div>
       <p
-  className={`text-[17px] font-semibold transition-colors duration-300 whitespace-nowrap sm:whitespace-normal ${
+  className={`text-[17px] font-medium font-gilroy transition-colors duration-300 whitespace-nowrap sm:whitespace-normal ${
     active === i ? "text-[#d4f5fa]" : "text-white/55"
   }`}
 >
@@ -205,7 +210,7 @@ catch(err){
   Sign in to generate AI-powered UI components in seconds
 </p>
 
-<div className='flex justify-center gap-4 sm:gap-5 mb-6 sm:mb-7'>
+<div className='flex justify-center font-gilroy gap-4 sm:gap-5 mb-6 sm:mb-7'>
   {
     [["150", "AICredits"], ["∞", "Components"], ["JSX", "Ready"]].map(([v, l], i) => (
       <div key={i} className='text-center'>
@@ -227,13 +232,13 @@ catch(err){
 
   whileHover={{ y: -2, scale: 1.02 }}
   whileTap={{ scale: 0.98 }}
-  className='w-full max-w-[500px] flex items-center justify-center gap-3 py-4.5 rounded-2xl bg-white text-[#0a1a1d] font-semibold text-[16px] cursor-pointer border-none shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:shadow-[0_12px_40px_rgba(59,232,255,0.2)] transition-shadow'
+  className='w-full max-w-[500px] flex items-center justify-center gap-3 py-4.5 rounded-2xl bg-white text-[#0a1a1d] font-semibold font-gilroy text-[16px] cursor-pointer border-none shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:shadow-[0_12px_40px_rgba(59,232,255,0.2)] transition-shadow'
 >
   <FcGoogle size={24} />
   Continue with Google
 </motion.button>
 
-<p className='text-[12px] text-[#64919b]/45 mt-4 sm:mt-5'>
+<p className='text-[13px] font-gilroy text-[#64919b]/45 mt-4 sm:mt-5'>
   No account needed for npm.{` `}
   
   <span

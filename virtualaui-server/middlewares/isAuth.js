@@ -20,7 +20,7 @@ const isAuth = async (req, res, next) => {
 
     console.log("Verified Token:", verifyToken);
 
-    req.userId = verifyToken.userId;
+   req.userId = verifyToken.userId;
 
     next();
   } catch (error) {

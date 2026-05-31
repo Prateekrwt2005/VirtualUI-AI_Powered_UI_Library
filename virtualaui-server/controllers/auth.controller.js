@@ -3,6 +3,7 @@ import { genToken } from "../configs/token.js";
 
 export const googleAuth= async (req,res)=>{
     try{
+          console.log("GOOGLE AUTH HIT");
         const {name,email}=req.body
         let user=await User.findOne({email})
         if(!user){
