@@ -574,6 +574,7 @@ function Home() {
 
                 <div className="flex flex-col sm:flex-row justify-center gap-3">
                   <motion.button
+                  onClick={handleGenerateClick}
                     whileHover={{ y: -2, scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     className="flex items-center justify-center gap-2 bg-[#3be8ff] text-[#030b0d] px-7 py-3.5 rounded-xl font-semibold text-sm cursor-pointer border-none shadow-[0_0_30px_rgba(59,232,255,0.3)] hover:shadow-[0_0_40px_rgba(59,232,255,0.45)] font-gilroy transition-shadow"
