@@ -24,6 +24,7 @@ import axios from "axios";
 import { ServerURL } from "../App";
 import { setUserData } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const features = [
   {
@@ -90,6 +91,12 @@ function Home() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  useEffect(() => {
+  if (userData?.role === "admin") {
+    navigate("/admin");
+  }
+}, [userData, navigate]);        
+
   const getLetters = (name) => {
     if (!name) return "";
     return name
@@ -105,7 +112,9 @@ function Home() {
       await axios.get(ServerURL + "/api/auth/logout", {
         withCredentials: true,
       });
-      dispatch(setUserData(null));
+     dispatch(setUserData(null));
+dispatch(setAllUsers([]));
+dispatch(setAllComponents([]));
       navigate("/");
     } catch (error) {
       console.log(error);
@@ -114,7 +123,7 @@ function Home() {
   };
 
   const handleCopy = () => {
-    navigator.clipboard.writeText("npm install virtual-ui-library");
+    navigator.clipboard.writeText("npm install @prateekrwt07/virtualui");
     setCopied(true);
 
     setTimeout(() => {
@@ -153,7 +162,7 @@ function Home() {
         </div>
 
         <div className="hidden md:flex items-center gap-5 lg:gap-8 text-sm text-white/50">
-          <button className="duration-200 px-5 py-2 border border-white/15 rounded-xl text-[17px] text-white/70 hover:text-white hover:border-white transition-all font-gilroy cursor-pointer bg-transparent w-full ">
+          <button onClick={()=>navigate("/components")} className="duration-200 px-5 py-2 border border-white/15 rounded-xl text-[17px] text-white/70 hover:text-white hover:border-white transition-all font-gilroy cursor-pointer bg-transparent w-full ">
             components
           </button>
           {userData ? (
@@ -194,7 +203,7 @@ function Home() {
 
                     <div className="py-1.5">
                       <button
-                        onClick={() => setProfileOpen(false)}
+                        onClick={() => {navigate("/my-components"); setProfileOpen(false);}}
                         className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/[0.04] transition-colors cursor-pointer  font-gilroy bg-transparent border-none text-left"
                       >
                         <TbComponents
@@ -248,7 +257,7 @@ function Home() {
             transition={{ duration: 0.25 }}
             className="md:hidden sticky top-[65px] z-30 bg-[#030b0d]/95 backdrop-blur-md border-b border-white/[0.05] px-4 py-4 flex flex-col gap-3"
           >
-            <button className="duration-200 px-6 py-2.5 border border-white/15 rounded-xl text-sm text-white/70 hover:text-white hover:border-white/25 transition-all cursor-pointer  font-gilroy bg-transparent w-full">
+            <button onClick={() => {navigate("/components")}} className="duration-200 px-6 py-2.5 border border-white/15 rounded-xl text-sm text-white/70 hover:text-white hover:border-white/25 transition-all cursor-pointer  font-gilroy bg-transparent w-full">
               Components
             </button>
 
@@ -263,7 +272,7 @@ function Home() {
                   </span>
                 </div>
                 <button
-                  onClick={() => setMenuOpen(false)}
+                  onClick={() => {navigate("/my-components"); setMenuOpen(false);}}
                   className="flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors py-1 bg-transparent  font-gilroy border-none cursor-pointer text-left"
                 >
                   <TbComponents size={15} className="text-[#3be8ff]/70" />
@@ -363,6 +372,7 @@ function Home() {
           <motion.button
             whileHover={{ y: -2 }}
             whileTap={{ scale: 0.97 }}
+            onClick={() => navigate("/components")}
             className="flex items-center justify-center gap-2 px-6 sm:px-7 py-3.5 bg-white text-[#030b0d] rounded-xl font-semibold text-[16px] cursor-pointer border-none shadow-[0_4px_24px_rgba(255,255,255,0.1)] hover:shadow-[0_6px_32px_rgba(255,255,255,0.18)] transition-shadow w-full sm:w-auto font-gilroy"
           >
             Get Started <TbArrowRight size={18} />
@@ -574,9 +584,10 @@ function Home() {
 
                 <div className="flex flex-col sm:flex-row justify-center gap-3">
                   <motion.button
-                  onClick={handleGenerateClick}
+                  
                     whileHover={{ y: -2, scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
+                    onClick={() => navigate("/generate")}
                     className="flex items-center justify-center gap-2 bg-[#3be8ff] text-[#030b0d] px-7 py-3.5 rounded-xl font-semibold text-sm cursor-pointer border-none shadow-[0_0_30px_rgba(59,232,255,0.3)] hover:shadow-[0_0_40px_rgba(59,232,255,0.45)] font-gilroy transition-shadow"
                   >
                     <HiSparkles size={15} />
@@ -586,6 +597,7 @@ function Home() {
                   <motion.button
                     whileHover={{ y: -2 }}
                     whileTap={{ scale: 0.98 }}
+                    onClick={() => navigate("/my-components")}
                     className="flex items-center justify-center gap-2 px-7 py-3.5 border border-white/15 rounded-xl text-sm text-white/60 hover:text-white hover:border-white/25 transition-all font-gilroy cursor-pointer bg-transparent"
                   >
                     <TbComponents size={16} className="text-[#3be8ff]/70" />
@@ -613,6 +625,7 @@ function Home() {
                   <motion.button
                     whileHover={{ y: -2 }}
                     whileTap={{ scale: 0.98 }}
+                    onClick={() => {navigate("/components")}}
                     className="flex items-center justify-center gap-2 px-7 py-3.5 border border-white/15 rounded-xl text-sm text-white/60 hover:text-white hover:border-white/25 transition-all font-gilroy cursor-pointer bg-transparent"
                   >
                     <TbComponents size={16} className="text-[#3be8ff]/70" />

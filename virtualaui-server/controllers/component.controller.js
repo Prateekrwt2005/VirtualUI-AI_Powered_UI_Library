@@ -56,16 +56,17 @@ return res.status(200).json(component)
     }
 
     const { componentId } = req.body;
+    const component = await Component.findById(componentId);
 
     if (!component) {
   return res.status(404).json({
-    message: "Component not found"
+    message: "Component not found",
   });
 }
 
 if (component.owner.toString() !== req.userId.toString()) {
   return res.status(403).json({
-    message: "You can only publish your own components"
+    message: "You can only publish your own components",
   });
 }
 
@@ -156,4 +157,25 @@ return res.status(200).json({
       message: `Failed to publish component ${error}`
     })
   }
-}                               
+}    
+
+export const getAllComponents = async (req, res) => {
+  try{
+    const components=await Component.find().populate("owner","name,email").sort({createdAt:-1})
+    if(!components){
+      return res.status(404).json({
+        message:"No components found"
+      })
+    }
+    return res.status(200).json({
+      message:"All components",
+      components
+    })
+
+
+  } catch(error){
+    return res.status(500).json({
+      message: `Failed to get components ${error}`
+    })
+  }
+}
