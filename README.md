@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./attachment_162633455.png" alt="VirtualUI Banner" width="100%" />
+  <img src="./attachment_162633455.png" alt="VirtualUI Banner" />
 </p>
 
 
