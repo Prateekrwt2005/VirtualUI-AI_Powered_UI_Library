@@ -1,4 +1,7 @@
-![VirtualUI Banner](./attachment_162633455.png)
+<p align="center">
+  <img src="./attachment_162633455.png" alt="VirtualUI Banner" width="100%" />
+</p>
+
 
 # VirtualUI 🚀
 
