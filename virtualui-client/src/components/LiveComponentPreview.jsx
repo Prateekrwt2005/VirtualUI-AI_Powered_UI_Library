@@ -2,6 +2,15 @@ import React, { useEffect, useRef, useState,useCallback } from "react";
 import { LiveError, LivePreview, LiveProvider } from "react-live";
 import {motion} from "motion/react";
 import { FiRefreshCw } from "react-icons/fi";
+import * as FiIcons from "react-icons/fi";
+import * as HiIcons from "react-icons/hi2";
+import * as IoIcons from "react-icons/io5";
+import * as LuIcons from "react-icons/lu";
+import * as FaIcons from "react-icons/fa6";
+import * as MdIcons from "react-icons/md";
+import * as TbIcons from "react-icons/tb";
+import * as BsIcons from "react-icons/bs";
+import * as AiIcons from "react-icons/ai";
 
 
 export const LiveComponentPreview = ({code}) => {
@@ -61,7 +70,15 @@ return (
   <LiveProvider
   key={refreshKey}
     code={wrappedCode}
-    scope={{ React, useState, useEffect, useRef, useCallback }}
+    scope={{ React, useState, useEffect, useRef, useCallback,   ...FiIcons,
+  ...HiIcons,
+  ...IoIcons,
+  ...LuIcons,
+  ...FaIcons,
+  ...MdIcons,
+  ...TbIcons,
+  ...BsIcons,
+  ...AiIcons,}}
 noInline
 
   > 

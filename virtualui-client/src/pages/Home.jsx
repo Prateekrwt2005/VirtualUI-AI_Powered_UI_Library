@@ -651,12 +651,11 @@ dispatch(setAllComponents([]));
           </div>
 
           <div className="flex flex-wrap justify-center gap-4 sm:gap-5 text-s text-white/30">
-            <span className="hover:text-white/60 font-gilroy transition-colors">
-              Components
-            </span>
+         
+           
 
             <span className="hover:text-white/60 font-gilroy transition-colors">
-              admin@virtualui.com
+              prateekrwt09@gmail.com
             </span>
           </div>
 

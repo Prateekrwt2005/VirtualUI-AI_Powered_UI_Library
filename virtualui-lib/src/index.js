@@ -18,3 +18,7 @@ export { ObsidianCalendarCard } from "./components/ObsidianCalendarCard/Obsidian
 export { PieChartCard } from "./components/PieChartCard/PieChartCard.jsx";
 
 export { InputOTP } from "./components/InputOTP/InputOTP.jsx";
+
+export { BlackSearchBar } from "./components/BlackSearchBar/BlackSearchBar.jsx";
+
+export { WhiteSearchBar } from "./components/WhiteSearchBar/WhiteSearchBar.jsx";
