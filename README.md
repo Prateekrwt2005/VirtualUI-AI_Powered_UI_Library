@@ -2,10 +2,17 @@
   <img src="./attachment_162633455.png" alt="VirtualUI Banner" />
 </p>
 
+<p align="center">
+  <strong>Premium AI-powered React component builder and library that generates production-grade UI from natural language prompts, previews code in real-time, and publishes components directly to npm.</strong>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/javascript-99.6%25-007acc" alt="JavaScript" />
+  <img src="https://img.shields.io/github/repo-size/Prateekrwt2005/VirtualAI---AI-Powered-UI-Library?color=orange" alt="Repo Size" />
+  <img src="https://img.shields.io/badge/license-ISC-green" alt="License" />
+</p>
 
 # VirtualUI 🚀
-
-VirtualUI is a premium, AI-powered React component library and generation platform. It allows developers to generate high-quality React components using natural language, customize props in real-time, preview them instantly, and publish them directly to a shared npm library package.
 
 ---
 
