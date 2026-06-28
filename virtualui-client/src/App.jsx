@@ -30,37 +30,43 @@ function App() {
   useEffect(() => {
     const checkRedirectAndFetch = async () => {
       try {
-        // Check if returning from Google OAuth Redirect
+        console.log("Checking for Firebase Google Auth redirect result...");
         const redirectRes = await getRedirectResult(auth);
+        console.log("Firebase getRedirectResult returned:", redirectRes);
+        
         if (redirectRes) {
           const user = redirectRes.user;
           const name = user.displayName;
           const email = user.email;
 
+          console.log("Redirect success. Posting login to backend for user:", email);
           const loginRes = await axios.post(
             ServerURL + "/api/auth/google",
             { name, email },
             { withCredentials: true }
           );
+          
+          console.log("Backend login response:", loginRes.data);
           if (loginRes.data.token) {
             localStorage.setItem("token", loginRes.data.token);
+            console.log("Saved Bearer token to localStorage.");
           }
           dispatch(setUserData(loginRes.data.user));
           setAuthChecked(true);
           return;
         }
 
-        // Normal check for session cookie
+        console.log("No redirect result found. Fetching current user session...");
         const res = await axios.get(
           ServerURL + "/api/user/current-user",
           {
             withCredentials: true,
           }
         );
-
+        console.log("Current user response:", res.data);
         dispatch(setUserData(res.data.user));
       } catch (err) {
-        console.log("Auth redirect or session check failed:", err);
+        console.error("Auth redirect or session check failed:", err);
         localStorage.removeItem("token");
         dispatch(setUserData(null));
       } finally {

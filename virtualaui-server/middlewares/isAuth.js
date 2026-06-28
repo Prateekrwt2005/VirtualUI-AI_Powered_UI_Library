@@ -5,6 +5,7 @@ const isAuth = async (req, res, next) => {
   try {
     console.log("Headers Cookie:", req.headers.cookie);
     console.log("Cookies:", req.cookies);
+    console.log("Auth Header:", req.headers.authorization);
 
     let token = req.cookies.token;
 
