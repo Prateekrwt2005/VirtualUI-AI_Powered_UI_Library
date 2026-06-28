@@ -55,10 +55,11 @@ function Auth({onClose}) {
 
 const googleauth=async()=>{
   try{
+    console.log("googleauth button clicked! Calling signInWithRedirect...");
     await signInWithRedirect(auth, provider);
   }
   catch(err){
-    console.log(err)
+    console.error("signInWithRedirect failed error:", err);
   }
 }
 
