@@ -6,7 +6,7 @@ import { HiSparkles } from "react-icons/hi2";
 import { TbLogin2, TbSettings, TbCopy, TbDownload } from "react-icons/tb";
 import { FcGoogle } from "react-icons/fc";
 import { auth, provider } from '../utils/firebase';
-import { signInWithPopup } from 'firebase/auth';
+import { signInWithRedirect } from 'firebase/auth';
 import axios from 'axios';
 import { ServerURL } from '../App';
 import { useDispatch } from 'react-redux';
@@ -55,22 +55,11 @@ function Auth({onClose}) {
 
 const googleauth=async()=>{
   try{
-    const response = await signInWithPopup(auth, provider);
-    let user = response.user;
-    let name=user.displayName;
-    let email=user.email;
-
-    const res = await axios.post(ServerURL+ "/api/auth/google", {name, email}, {withCredentials: true});
-
-    console.log("BACKEND RESPONSE:", res.data)
-
- dispatch(setUserData(res.data.user))
-  onClose()
-
-}
-catch(err){
-  console.log(err)
-}
+    await signInWithRedirect(auth, provider);
+  }
+  catch(err){
+    console.log(err)
+  }
 }
 
   return (

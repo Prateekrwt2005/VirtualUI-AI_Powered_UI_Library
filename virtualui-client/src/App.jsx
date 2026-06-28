@@ -16,6 +16,8 @@ import {
 } from "./redux/userSlice";
 
 import axios from "axios";
+import { auth } from "./utils/firebase";
+import { getRedirectResult } from "firebase/auth";
 
 export const ServerURL = import.meta.env.VITE_SERVER_URL || "http://localhost:8000";
 
@@ -26,8 +28,26 @@ function App() {
   const [authChecked, setAuthChecked] = useState(false);
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const checkRedirectAndFetch = async () => {
       try {
+        // Check if returning from Google OAuth Redirect
+        const redirectRes = await getRedirectResult(auth);
+        if (redirectRes) {
+          const user = redirectRes.user;
+          const name = user.displayName;
+          const email = user.email;
+
+          const loginRes = await axios.post(
+            ServerURL + "/api/auth/google",
+            { name, email },
+            { withCredentials: true }
+          );
+          dispatch(setUserData(loginRes.data.user));
+          setAuthChecked(true);
+          return;
+        }
+
+        // Normal check for session cookie
         const res = await axios.get(
           ServerURL + "/api/user/current-user",
           {
@@ -37,14 +57,14 @@ function App() {
 
         dispatch(setUserData(res.data.user));
       } catch (err) {
-        console.log(err);
+        console.log("Auth redirect or session check failed:", err);
         dispatch(setUserData(null));
       } finally {
         setAuthChecked(true);
       }
     };
 
-    fetchUser();
+    checkRedirectAndFetch();
   }, [dispatch]);
 
   useEffect(() => {
