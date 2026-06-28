@@ -57,14 +57,24 @@ function App() {
         }
 
         console.log("No redirect result found. Fetching current user session...");
-        const res = await axios.get(
-          ServerURL + "/api/user/current-user",
-          {
-            withCredentials: true,
+        try {
+          const res = await axios.get(
+            ServerURL + "/api/user/current-user",
+            {
+              withCredentials: true,
+            }
+          );
+          console.log("Current user response:", res.data);
+          dispatch(setUserData(res.data.user));
+        } catch (currentUserErr) {
+          if (currentUserErr.response?.status === 401) {
+            console.log("User is not currently logged in (anonymous session).");
+          } else {
+            console.error("Error fetching current user session:", currentUserErr);
           }
-        );
-        console.log("Current user response:", res.data);
-        dispatch(setUserData(res.data.user));
+          localStorage.removeItem("token");
+          dispatch(setUserData(null));
+        }
       } catch (err) {
         console.error("Auth redirect or session check failed:", err);
         localStorage.removeItem("token");
