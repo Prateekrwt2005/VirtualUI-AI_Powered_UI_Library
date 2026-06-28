@@ -519,6 +519,7 @@ const handleLogout = async () => {
       withCredentials: true,
     });
 
+    localStorage.removeItem("token");
     dispatch(setUserData(null));
     navigate("/");
   } catch (error) {

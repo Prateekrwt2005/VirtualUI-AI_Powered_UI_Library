@@ -112,9 +112,10 @@ function Home() {
       await axios.get(ServerURL + "/api/auth/logout", {
         withCredentials: true,
       });
-     dispatch(setUserData(null));
-dispatch(setAllUsers([]));
-dispatch(setAllComponents([]));
+      localStorage.removeItem("token");
+      dispatch(setUserData(null));
+      dispatch(setAllUsers([]));
+      dispatch(setAllComponents([]));
       navigate("/");
     } catch (error) {
       console.log(error);

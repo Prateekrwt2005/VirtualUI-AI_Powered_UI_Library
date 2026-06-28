@@ -42,6 +42,9 @@ function App() {
             { name, email },
             { withCredentials: true }
           );
+          if (loginRes.data.token) {
+            localStorage.setItem("token", loginRes.data.token);
+          }
           dispatch(setUserData(loginRes.data.user));
           setAuthChecked(true);
           return;
@@ -58,6 +61,7 @@ function App() {
         dispatch(setUserData(res.data.user));
       } catch (err) {
         console.log("Auth redirect or session check failed:", err);
+        localStorage.removeItem("token");
         dispatch(setUserData(null));
       } finally {
         setAuthChecked(true);
