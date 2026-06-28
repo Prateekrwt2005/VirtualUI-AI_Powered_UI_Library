@@ -16,13 +16,23 @@ const app= express()
 const allowedOrigins = [
   "http://localhost:5173",
   process.env.CLIENT_URL
-].filter(Boolean);
+].filter(Boolean).map(url => url.trim().replace(/\/$/, ""));
 
 app.use(cors({
     origin: function (origin, callback) {
-        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        if (!origin) {
+            callback(null, true);
+            return;
+        }
+        
+        const sanitizedOrigin = origin.trim().replace(/\/$/, "");
+        const isAllowed = allowedOrigins.includes(sanitizedOrigin) || 
+                          sanitizedOrigin.endsWith(".vercel.app");
+        
+        if (isAllowed) {
             callback(null, true);
         } else {
+            console.error(`CORS Blocked: Origin "${origin}" not in allowed list:`, allowedOrigins);
             callback(new Error("Not allowed by CORS"));
         }
     },
