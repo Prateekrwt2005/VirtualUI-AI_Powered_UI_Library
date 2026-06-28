@@ -17,7 +17,7 @@ import {
 
 import axios from "axios";
 
-export const ServerURL = "http://localhost:8000";
+export const ServerURL = import.meta.env.VITE_SERVER_URL || "http://localhost:8000";
 
 function App() {
   const dispatch = useDispatch();

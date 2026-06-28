@@ -11,10 +11,11 @@ export const googleAuth= async (req,res)=>{
         }
         
         let token=await genToken(user._id)
+        const isProduction = process.env.NODE_ENV === "production";
         res.cookie("token",token,{
             httpOnly:true,
-            secure:false,
-            sameSite:"strict",
+            secure:isProduction,
+            sameSite:isProduction ? "none" : "strict",
             maxAge: 7*24*60*60*1000
         })
 
@@ -30,10 +31,11 @@ export const googleAuth= async (req,res)=>{
 export const logOut= async(req,res)=>{
 
     try{
+        const isProduction = process.env.NODE_ENV === "production";
         await res.clearCookie("token",{
             httpOnly:true,
-            secure:false,
-            sameSite:"strict",
+            secure:isProduction,
+            sameSite:isProduction ? "none" : "strict",
         })
         return res.status(200).json({message:"Logout successful"})
     }catch(error){

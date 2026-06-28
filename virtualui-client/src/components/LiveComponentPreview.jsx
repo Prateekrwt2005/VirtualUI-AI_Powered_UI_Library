@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState,useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { LiveError, LivePreview, LiveProvider } from "react-live";
-import {motion} from "motion/react";
+import { motion } from "motion/react";
 import { FiRefreshCw } from "react-icons/fi";
 import * as FiIcons from "react-icons/fi";
 import * as HiIcons from "react-icons/hi2";
@@ -12,13 +12,12 @@ import * as TbIcons from "react-icons/tb";
 import * as BsIcons from "react-icons/bs";
 import * as AiIcons from "react-icons/ai";
 
-
-export const LiveComponentPreview = ({code}) => {
-    const [refreshKey, setRefreshKey] = useState(0);
+export const LiveComponentPreview = ({ code }) => {
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const refreshPreview = () => {
-  setRefreshKey((prev) => prev + 1);
-}
+    setRefreshKey((prev) => prev + 1);
+  };
 
   let sanitized = code
     .replace(/import\s+.*?from\s+['"].*?['"];?/g, "")
@@ -29,127 +28,158 @@ export const LiveComponentPreview = ({code}) => {
     .replace(/position\s*:\s*"fixed"/g, 'position: "absolute"')
     .replace(/\bfixed\b/g, "absolute");
 
-    const match = sanitized.match(/const\s+([A-Z]\w+)/);
-const componentName = match ? match[1] : null;
+  const match = sanitized.match(/const\s+([A-Z]\w+)/);
+  const componentName = match ? match[1] : null;
 
-const wrappedCode = componentName
-  ? `${sanitized}\n\nrender(<${componentName} />)`
-  : sanitized;
+  const wrappedCode = componentName
+    ? `${sanitized}\n\nrender(<${componentName} />)`
+    : sanitized;
 
-return (
-  <div
-  style={{
-    position: "relative",
-    width: "100%",
-    maxWidth: "100%",
-  }}
->
+  return (
+    <div style={{ position: "relative", width: "100%", maxWidth: "100%" }}>
+      <LiveProvider
+        key={refreshKey}
+        code={wrappedCode}
+        scope={{
+          React,
+          useState,
+          useEffect,
+          useRef,
+          useCallback,
+          ...FiIcons,
+          ...HiIcons,
+          ...IoIcons,
+          ...LuIcons,
+          ...FaIcons,
+          ...MdIcons,
+          ...TbIcons,
+          ...BsIcons,
+          ...AiIcons,
+        }}
+        noInline
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          style={{
+            width: "100%",
+            border: "1px solid rgba(255,255,255,.08)",
+            borderRadius: "14px",
+            background: "#0b0b0d",
+            overflow: "hidden",
+            boxShadow:
+              "0 8px 24px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.03)",
+          }}
+        >
+          {/* Header bar */}
+          <div
+            style={{
+              height: 40,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "0 14px",
+              background: "#121316",
+              borderBottom: "1px solid rgba(255,255,255,.06)",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              {["#ff5f57", "#febc2e", "#28c840"].map((color) => (
+                <div
+                  key={color}
+                  style={{
+                    width: 9,
+                    height: 9,
+                    borderRadius: "50%",
+                    background: color,
+                  }}
+                />
+              ))}
+            </div>
 
-<motion.button
-  onClick={refreshPreview}
-  whileTap={{ scale: 0.9, rotate: 90 }}
-  transition={{ type: "spring", stiffness: 300 }}
-  style={{
-    position: "absolute",
-    right: "8px",
-    top: "8px",
-    background: "#1e293b",
-    border: "none",
-    color: "#94a3b8",
-    padding: "6px",
-    borderRadius: "8px",
-    cursor: "pointer",
-    zIndex: 10,
-  }}
->
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <span
+                style={{
+                  color: "rgba(255,255,255,.45)",
+                  fontSize: 11,
+                  fontWeight: 500,
+                  fontFamily: "Gilroy",
+                }}
+              >
+                Live Preview
+              </span>
 
-<FiRefreshCw size={16} />
+              <motion.button
+                onClick={refreshPreview}
+                whileTap={{ scale: 0.9, rotate: 180 }}
+                transition={{ type: "spring", stiffness: 300 }}
+                style={{
+                  width: 28,
+                  height: 28,
+                  borderRadius: 8,
+                  border: "1px solid rgba(255,255,255,.06)",
+                  background: "#1b1d22",
+                  color: "#94a3b8",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                }}
+              >
+                <FiRefreshCw size={13} />
+              </motion.button>
+            </div>
+          </div>
 
-</motion.button>
+          {/* Preview area — no zoom, natural size, compact padding */}
+          <div
+            style={{
+              width: "100%",
+              minHeight: "200px",
+              background: "#09090b",
+              padding: "20px 16px",
+              overflow: "auto",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <LivePreview />
+          </div>
+        </motion.div>
 
-  <LiveProvider
-  key={refreshKey}
-    code={wrappedCode}
-    scope={{ React, useState, useEffect, useRef, useCallback,   ...FiIcons,
-  ...HiIcons,
-  ...IoIcons,
-  ...LuIcons,
-  ...FaIcons,
-  ...MdIcons,
-  ...TbIcons,
-  ...BsIcons,
-  ...AiIcons,}}
-noInline
+        <LiveError
+          style={{
+            marginTop: "8px",
+            padding: "10px 12px",
+            background: "#450a0a",
+            color: "#f87171",
+            borderRadius: "8px",
+            fontSize: "12px",
+            fontFamily: "monospace",
+            overflowX: "auto",
+          }}
+        />
 
-  > 
-
-  <motion.div
-  initial={{ opacity: 0, y: 10 }}
-animate={{ opacity: 1, y: 0 }}
-transition={{ duration: 0.4 }}
-  style={{
-    width: "100%",
-    minHeight: "300px",
-
-    // 🔥 Responsive max width
-    maxWidth: "100%",
-
-    border: "1px solid #1e293b",
-    borderRadius: "12px",
-    background: "#020617",
-
-    position: "relative",
-    overflow: "hidden",
-
-    // 🔥 Responsive padding
-    padding: "clamp(10px, 2vw, 20px)",
-  }}>
-
-<motion.div
-  style={{
-    width: "100%",
-    height: "100%",
-    position: "relative",
-    overflow: "auto",
-  }}
->
-  <LivePreview />
-</motion.div>
-
-
-</motion.div>
-
-<LiveError
-  style={{
-    marginTop: "10px",
-    padding: "10px",
-    background: "#450a0a",
-    color: "#f87171",
-    borderRadius: "6px",
-    fontSize: "clamp(12px, 1.5vw, 14px)",
-    overflowX: "auto",
-  }}
-/>
-
-{!componentName && (
-  <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    style={{
-      marginTop: "10px",
-      padding: "10px",
-      background: "#1e293b",
-      borderRadius: "6px",
-      color: "#94a3b8",
-      fontSize: "clamp(12px, 1.5vw, 14px)",
-    }}
-  >
-    Preview is not available. Copy the code and paste it into your
-    project.
-  </motion.div>
-)}
-</LiveProvider>
-</div>
-)
-
-}
+        {!componentName && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            style={{
+              marginTop: "8px",
+              padding: "10px 12px",
+              background: "#1e293b",
+              borderRadius: "8px",
+              color: "#94a3b8",
+              fontSize: "12px",
+            }}
+          >
+            Preview is not available. Copy the code and paste it into your
+            project.
+          </motion.div>
+        )}
+      </LiveProvider>
+    </div>
+  );
+};
