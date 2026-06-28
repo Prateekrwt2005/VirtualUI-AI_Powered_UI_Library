@@ -29,6 +29,7 @@ function App() {
 
   useEffect(() => {
     const checkRedirectAndFetch = async () => {
+      const tokenOnStart = localStorage.getItem("token");
       try {
         console.log("Checking for Firebase Google Auth redirect result...");
         const redirectRes = await getRedirectResult(auth);
@@ -72,13 +73,17 @@ function App() {
           } else {
             console.error("Error fetching current user session:", currentUserErr);
           }
-          localStorage.removeItem("token");
-          dispatch(setUserData(null));
+          if (tokenOnStart) {
+            localStorage.removeItem("token");
+            dispatch(setUserData(null));
+          }
         }
       } catch (err) {
         console.error("Auth redirect or session check failed:", err);
-        localStorage.removeItem("token");
-        dispatch(setUserData(null));
+        if (tokenOnStart) {
+          localStorage.removeItem("token");
+          dispatch(setUserData(null));
+        }
       } finally {
         setAuthChecked(true);
       }
