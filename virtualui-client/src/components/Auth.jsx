@@ -6,7 +6,7 @@ import { HiSparkles } from "react-icons/hi2";
 import { TbLogin2, TbSettings, TbCopy, TbDownload } from "react-icons/tb";
 import { FcGoogle } from "react-icons/fc";
 import { auth, provider } from '../utils/firebase';
-import { signInWithRedirect } from 'firebase/auth';
+import { signInWithPopup } from 'firebase/auth';
 import axios from 'axios';
 import { ServerURL } from '../App';
 import { useDispatch } from 'react-redux';
@@ -55,11 +55,25 @@ function Auth({onClose}) {
 
 const googleauth=async()=>{
   try{
-    console.log("googleauth button clicked! Calling signInWithRedirect...");
-    await signInWithRedirect(auth, provider);
+    console.log("googleauth button clicked! Calling signInWithPopup...");
+    const response = await signInWithPopup(auth, provider);
+    let user = response.user;
+    let name=user.displayName;
+    let email=user.email;
+
+    console.log("Popup login success. Posting credentials to backend...");
+    const res = await axios.post(ServerURL+ "/api/auth/google", {name, email}, {withCredentials: true});
+    console.log("Backend login response:", res.data);
+
+    if (res.data.token) {
+      localStorage.setItem("token", res.data.token);
+      console.log("Saved Bearer token to localStorage.");
+    }
+    dispatch(setUserData(res.data.user));
+    onClose();
   }
   catch(err){
-    console.error("signInWithRedirect failed error:", err);
+    console.error("signInWithPopup failed error:", err);
   }
 }
 
