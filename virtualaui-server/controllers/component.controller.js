@@ -113,32 +113,53 @@ if (fs.existsSync(distPath)) {
   fs.rmSync(distPath, { recursive: true, force: true });
 }
 
-//build lib
-
-  console.log("Building library...");
-
-execSync("npm run build", {
+// Install library dependencies (required on remote servers like Render)
+console.log("Installing library dependencies...");
+execSync("npm install", {
   cwd: libPath,
   stdio: "inherit",
 });
 
-//update version
+// Configure npm authentication token
+const npmrcPath = path.join(libPath, ".npmrc");
+if (process.env.NPM_TOKEN) {
+  console.log("Configuring NPM authentication token...");
+  fs.writeFileSync(
+    npmrcPath,
+    `//registry.npmjs.org/:_authToken=${process.env.NPM_TOKEN.trim()}\n`
+  );
+} else {
+  console.warn("WARNING: NPM_TOKEN environment variable is not defined in backend settings.");
+}
 
-console.log("Updating version...");
+try {
+  //build lib
+  console.log("Building library...");
+  execSync("npm run build", {
+    cwd: libPath,
+    stdio: "inherit",
+  });
 
-execSync("npm version patch --no-git-tag-version", {
-  cwd: libPath,
-  stdio: "inherit"
-});
+  //update version
+  console.log("Updating version...");
+  execSync("npm version patch --no-git-tag-version", {
+    cwd: libPath,
+    stdio: "inherit"
+  });
 
-// publish to npm
-
-console.log("Publishing to npm...");
-
-execSync("npm publish --access public", {
-  cwd: libPath,
-  stdio: "inherit"
-});
+  // publish to npm
+  console.log("Publishing to npm...");
+  execSync("npm publish --access public", {
+    cwd: libPath,
+    stdio: "inherit"
+  });
+} finally {
+  // Clean up .npmrc to prevent token leaks
+  if (fs.existsSync(npmrcPath)) {
+    console.log("Cleaning up .npmrc authentication file...");
+    fs.unlinkSync(npmrcPath);
+  }
+}
 
   component.visibility = "public";
 component.npmPackage = "@prateekrwt07/virtualui";
