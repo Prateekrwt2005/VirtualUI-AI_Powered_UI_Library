@@ -115,7 +115,7 @@ if (fs.existsSync(distPath)) {
 
 // Install library dependencies (required on remote servers like Render)
 console.log("Installing library dependencies...");
-execSync("npm install", {
+execSync("npm install --include=dev", {
   cwd: libPath,
   stdio: "inherit",
 });
