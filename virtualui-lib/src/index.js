@@ -28,7 +28,7 @@ export { MediaPlayer } from "./components/MediaPlayer/MediaPlayer.jsx";
 
 
 
-export { ProfileCard } from "./components/ProfileCard/ProfileCard.jsx";
+export { ProfileCard } from "./components/Profilecard/Profilecard.jsx";
 
 export { ToggleButton } from "./components/ToggleButton/ToggleButton.jsx";
 
