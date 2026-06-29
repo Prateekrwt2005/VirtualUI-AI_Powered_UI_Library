@@ -132,19 +132,38 @@ if (process.env.NPM_TOKEN) {
   console.warn("WARNING: NPM_TOKEN environment variable is not defined in backend settings.");
 }
 
+// Fetch latest version from npm registry to prevent duplicate version conflicts
+let nextVersion = "1.0.0";
 try {
+  console.log("Fetching latest version from npm registry...");
+  const npmPackageName = "@prateekrwt07/virtualui";
+  const npmVersion = execSync(`npm view ${npmPackageName} version`, {
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "ignore"] // ignore stderr to prevent throwing if package doesn't exist yet
+  }).trim();
+  
+  if (npmVersion) {
+    const [major, minor, patch] = npmVersion.split(".").map(Number);
+    nextVersion = `${major}.${minor}.${patch + 1}`;
+    console.log(`Latest NPM version: ${npmVersion}. Next version to publish: ${nextVersion}`);
+  }
+} catch (e) {
+  console.log("Could not fetch npm version (package might be unpublished). Defaulting to 1.0.0");
+}
+
+try {
+  // Write the new version to package.json
+  const packageJsonPath = path.join(libPath, "package.json");
+  const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
+  packageJson.version = nextVersion;
+  fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
+  console.log(`Updated package.json version to ${nextVersion}`);
+
   //build lib
   console.log("Building library...");
   execSync("npm run build", {
     cwd: libPath,
     stdio: "inherit",
-  });
-
-  //update version
-  console.log("Updating version...");
-  execSync("npm version patch --no-git-tag-version", {
-    cwd: libPath,
-    stdio: "inherit"
   });
 
   // publish to npm
