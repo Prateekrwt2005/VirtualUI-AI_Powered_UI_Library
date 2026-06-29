@@ -117,7 +117,7 @@ if (fs.existsSync(distPath)) {
 console.log("Installing library dependencies...");
 execSync("npm install --include=dev", {
   cwd: libPath,
-  stdio: "inherit",
+  encoding: "utf8",
 });
 
 // Configure npm authentication token
@@ -163,14 +163,14 @@ try {
   console.log("Building library...");
   execSync("npm run build", {
     cwd: libPath,
-    stdio: "inherit",
+    encoding: "utf8",
   });
 
   // publish to npm
   console.log("Publishing to npm...");
   execSync("npm publish --access public", {
     cwd: libPath,
-    stdio: "inherit"
+    encoding: "utf8",
   });
 } finally {
   // Clean up .npmrc to prevent token leaks
@@ -192,10 +192,11 @@ return res.status(200).json({
 
  
   } catch (error) {
-    console.log(error);
+    console.error("Publish execution error details:", error);
+    const detailMsg = error.stderr || error.stdout || error.message || "";
     return res.status(500).json({
-      message: `Failed to publish component ${error}`
-    })
+      message: `Failed to publish component: ${detailMsg.toString().substring(0, 300)}`
+    });
   }
 }    
 
