@@ -213,8 +213,9 @@ const handlePublished = async () => {
     showToast("Published to npm successfully!", "success");
    setPublishing(false);
   } catch (error) {
-    console.log(error);
-    showToast("Published Failed", "error");
+    console.error("Publishing error:", error);
+    const errMsg = error.response?.data?.message || "Published Failed";
+    showToast(errMsg, "error");
     setPublishing(false);
   }
 };
