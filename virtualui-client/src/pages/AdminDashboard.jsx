@@ -326,7 +326,7 @@ const handlePublished = async () => {
   className="p-3.5 sm:p-4"
 >
   {code.trim() ? (
-    <LiveComponentPreview code={code} />
+    <LiveComponentPreview code={code} name={name} />
   ) : (
     <div
   className="h-36 sm:h-40 flex items-center justify-center text-white/20 font-gilroy text-sm rounded-xl"

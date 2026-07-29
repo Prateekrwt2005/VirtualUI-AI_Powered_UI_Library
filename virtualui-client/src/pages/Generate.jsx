@@ -507,7 +507,7 @@ style={{
   key="preview"
 >
   {generated?.code && (
-    <LiveComponentPreview code={generated.code} />
+    <LiveComponentPreview code={generated.code} name={generated.name} />
   )}
 </motion.div>
     ) : (

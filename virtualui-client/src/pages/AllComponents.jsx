@@ -218,7 +218,7 @@ function DetailPanel({ component, onBack }) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              <LiveComponentPreview code={component.code} />
+              <LiveComponentPreview code={component.code} name={component.name} />
             </motion.div>
           )}
 

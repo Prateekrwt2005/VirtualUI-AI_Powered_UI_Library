@@ -6,6 +6,7 @@ export const askAI = async (messages) => {
   }
 
   const models = [
+    "qwen/qwen-2.5-coder-32b-instruct:free",
     "google/gemini-2.0-flash-lite-preview-v1:free",
     "google/gemini-2.0-flash-exp:free",
     "google/gemini-2.5-flash",
@@ -22,7 +23,7 @@ export const askAI = async (messages) => {
           model,
           messages,
           temperature: 0.7,
-          max_tokens: 1200,
+          max_tokens: 700,
           response_format: { type: "json_object" },
         },
         {

@@ -95,6 +95,7 @@ export const generateComponent= async (req,res)=>{
     content: `You are a React component generator. Output ONLY a valid JSON object. No markdown, no backticks, no explanation.
 
 CRITICAL: Your entire response must be parseable by JSON.parse(). Start with { and end with }.
+CRITICAL: The component name in both the "name" field and the "code" export statement must start with an uppercase letter (e.g., GlassPriceCard, not glasspricecard).
 
 OUTPUT FORMAT:
 {
@@ -105,7 +106,7 @@ OUTPUT FORMAT:
 
 --- CODE RULES ---
 - Import hooks like this: import React, { useState, useEffect, useRef, useCallback } from "react";
-- Named export only: export const ComponentName = ({ ...props }) => { ... }
+- Named export only: export const ComponentName = ({ ...props }) => { ... } (ComponentName must be capitalized / PascalCase)
 - Inline styles ONLY. No CSS classes, no Tailwind, no styled-components.
 - All props must have default values. Component must look great with zero props passed.
 - No TypeScript. No external libraries. No framer-motion. No icon libraries.

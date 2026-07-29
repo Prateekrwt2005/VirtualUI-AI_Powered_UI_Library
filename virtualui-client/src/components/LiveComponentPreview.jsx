@@ -12,7 +12,7 @@ import * as TbIcons from "react-icons/tb";
 import * as BsIcons from "react-icons/bs";
 import * as AiIcons from "react-icons/ai";
 
-export const LiveComponentPreview = ({ code }) => {
+export const LiveComponentPreview = ({ code, name }) => {
   const [refreshKey, setRefreshKey] = useState(0);
 
   const refreshPreview = () => {
@@ -28,8 +28,8 @@ export const LiveComponentPreview = ({ code }) => {
     .replace(/position\s*:\s*"fixed"/g, 'position: "absolute"')
     .replace(/\bfixed\b/g, "absolute");
 
-  const match = sanitized.match(/const\s+([A-Z]\w+)/);
-  const componentName = match ? match[1] : null;
+  const match = sanitized.match(/(?:const|function|class)\s+([a-zA-Z]\w+)/);
+  const componentName = name || (match ? match[1] : null);
 
   const wrappedCode = componentName
     ? `${sanitized}\n\nrender(<${componentName} />)`
