@@ -94,6 +94,7 @@ OUTPUT FORMAT:
 }
 
 --- CODE RULES ---
+- Keep the component code extremely compact, clean, and under 120 lines total. Keep mock data arrays (like plans, features, or links) to a maximum of 2 items. This is crucial to prevent code truncation.
 - Import hooks like this: import React, { useState, useEffect, useRef, useCallback } from "react";
 - Named export only: export const ComponentName = ({ ...props }) => { ... } (ComponentName must be capitalized / PascalCase)
 - Inline styles ONLY. No CSS classes, no Tailwind, no styled-components.
