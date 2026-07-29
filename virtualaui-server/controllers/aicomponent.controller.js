@@ -250,8 +250,9 @@ for(let attempt = 1; attempt <= 3; attempt++){
         console.log("AI RESPONSE END:", aiResponse?.slice(-500));
 
         if(attempt === 3){
+            const previewResponse = aiResponse ? aiResponse.toString().substring(0, 150) : "empty";
             return res.status(500).json({
-                message: "AI returned invalid JSON after 3 attempts"
+                message: `AI returned invalid JSON. Raw: ${previewResponse}. Parser error: ${error.message}`
             });
         }
     }
