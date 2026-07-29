@@ -6,8 +6,10 @@ export const askAI = async (messages) => {
   }
 
   const models = [
+    "google/gemini-2.0-flash-lite-preview-v1:free",
+    "google/gemini-2.0-flash-exp:free",
     "google/gemini-2.5-flash",
-   "deepseek/deepseek-chat",
+    "deepseek/deepseek-chat",
   ];
 
   for (const model of models) {
@@ -20,7 +22,7 @@ export const askAI = async (messages) => {
           model,
           messages,
           temperature: 0.7,
-          max_tokens: 2000,
+          max_tokens: 1200,
           response_format: { type: "json_object" },
         },
         {
