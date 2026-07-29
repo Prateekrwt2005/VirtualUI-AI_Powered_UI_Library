@@ -25,9 +25,11 @@ app.use(cors({
             return;
         }
         
-        const sanitizedOrigin = origin.trim().replace(/\/$/, "");
-        const isAllowed = allowedOrigins.includes(sanitizedOrigin) || 
+        const sanitizedOrigin = origin.trim().toLowerCase().replace(/\/$/, "");
+        const isAllowed = allowedOrigins.map(o => o.toLowerCase()).includes(sanitizedOrigin) || 
                           sanitizedOrigin.endsWith(".vercel.app");
+        
+        console.log(`CORS check - Origin: "${origin}", Sanitized: "${sanitizedOrigin}", IsAllowed: ${isAllowed}`);
         
         if (isAllowed) {
             callback(null, true);
