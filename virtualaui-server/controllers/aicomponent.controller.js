@@ -35,27 +35,16 @@ const robustParseJSON = (str) => {
     
     const valueStartIdx = codeStartIdx + 6 + firstQuoteIdx + 1;
     
+    const afterCodeStart = str.substring(valueStartIdx);
+    const boundaryMatch = afterCodeStart.match(/"\s*,\s*"(?:props|name)"/);
     let codeEndIdx = -1;
-    const propsIdx = str.indexOf('"props"', valueStartIdx);
-    if (propsIdx !== -1) {
-      const sub = str.substring(valueStartIdx, propsIdx);
-      const lastQuote = sub.lastIndexOf('"');
-      if (lastQuote !== -1) {
-        codeEndIdx = valueStartIdx + lastQuote;
-      }
+    if (boundaryMatch) {
+      codeEndIdx = valueStartIdx + boundaryMatch.index;
     } else {
-      const lastBrace = str.lastIndexOf('}');
-      if (lastBrace !== -1) {
-        const sub = str.substring(valueStartIdx, lastBrace);
-        const lastQuote = sub.lastIndexOf('"');
-        if (lastQuote !== -1) {
-          codeEndIdx = valueStartIdx + lastQuote;
-        }
+      const endBraceMatch = afterCodeStart.match(/"\s*}\s*$/);
+      if (endBraceMatch) {
+        codeEndIdx = valueStartIdx + endBraceMatch.index;
       }
-    }
-    
-    if (codeEndIdx === -1) {
-      throw new Error("Could not find end of code string value");
     }
     
     let rawCode = str.substring(valueStartIdx, codeEndIdx);
