@@ -107,10 +107,11 @@ const showToast = (message, type = "info") => {
    showToast("AI Component Generated", "success");
 
   } catch (error) {
- 
-  showToast("Generate Error", "error");
-  setGenerating(false);
-}
+    console.error("Generation error:", error);
+    const errMsg = error.response?.data?.message || "Generate Error";
+    showToast(errMsg, "error");
+    setGenerating(false);
+  }
 };
 
 const handleSave = async () => {
