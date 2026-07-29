@@ -1,6 +1,77 @@
 import { User } from "../models/user.model.js"
 import { askAI } from "../utils/openRouter.js"
 
+const robustParseJSON = (str) => {
+  try {
+    return JSON.parse(str);
+  } catch (parseError) {
+    console.log("Standard JSON.parse failed. Attempting robust regex extraction...", parseError.message);
+    
+    // Extract "name"
+    const nameMatch = str.match(/"name"\s*:\s*"([^"]+)"/);
+    const name = nameMatch ? nameMatch[1] : "GeneratedComponent";
+    
+    // Extract "props"
+    const propsMatch = str.match(/"props"\s*:\s*\[([\s\S]*?)\]/);
+    let props = [];
+    if (propsMatch) {
+      props = propsMatch[1]
+        .split(",")
+        .map(p => p.trim().replace(/^["']|["']$/g, ""))
+        .filter(Boolean);
+    }
+    
+    // Extract "code"
+    const codeStartIdx = str.indexOf('"code"');
+    if (codeStartIdx === -1) {
+      throw new Error("Could not find code field in AI response");
+    }
+    
+    const afterColon = str.substring(codeStartIdx + 6);
+    const firstQuoteIdx = afterColon.indexOf('"');
+    if (firstQuoteIdx === -1) {
+      throw new Error("Could not find start of code string value");
+    }
+    
+    const valueStartIdx = codeStartIdx + 6 + firstQuoteIdx + 1;
+    
+    let codeEndIdx = -1;
+    const propsIdx = str.indexOf('"props"', valueStartIdx);
+    if (propsIdx !== -1) {
+      const sub = str.substring(valueStartIdx, propsIdx);
+      const lastQuote = sub.lastIndexOf('"');
+      if (lastQuote !== -1) {
+        codeEndIdx = valueStartIdx + lastQuote;
+      }
+    } else {
+      const lastBrace = str.lastIndexOf('}');
+      if (lastBrace !== -1) {
+        const sub = str.substring(valueStartIdx, lastBrace);
+        const lastQuote = sub.lastIndexOf('"');
+        if (lastQuote !== -1) {
+          codeEndIdx = valueStartIdx + lastQuote;
+        }
+      }
+    }
+    
+    if (codeEndIdx === -1) {
+      throw new Error("Could not find end of code string value");
+    }
+    
+    let rawCode = str.substring(valueStartIdx, codeEndIdx);
+    
+    // Unescape common JSON characters
+    let code = rawCode
+      .replace(/\\"/g, '"')
+      .replace(/\\n/g, '\n')
+      .replace(/\\t/g, '\t')
+      .replace(/\\\\/g, '\\');
+      
+    console.log("Robust regex extraction succeeded! Name:", name, "Props:", props);
+    return { name, code, props };
+  }
+};
+
 
 
 export const generateComponent= async (req,res)=>{
@@ -168,7 +239,7 @@ for(let attempt = 1; attempt <= 3; attempt++){
             .replace(/```/g, "")
             .trim();
 
-        parsed = JSON.parse(clean);
+        parsed = robustParseJSON(clean);
 
         break;
 
